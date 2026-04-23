@@ -23,11 +23,14 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="ComPtr.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SharedStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

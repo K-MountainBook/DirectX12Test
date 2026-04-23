@@ -1,5 +1,6 @@
 #include "App.h"
 #include "Engine.h"
+#include "Scene.h"
 
 // グローバル変数
 // アプリケーションインスタンスハンドルとメインウィンドウハンドルを保持します。
@@ -125,8 +126,9 @@ void MainLoop() {
 			//  - 更新処理（Update）
 			//  - 描画処理（Render）
 			// ここにフレーム毎のロジックを入れる
+			g_Scene->Update();
 			g_Engine->BeginRender();
-
+			g_Scene->Draw();
 			g_Engine->EndRender();
 
 		}
@@ -149,6 +151,13 @@ void StartApp(const TCHAR* appName) {
 
 	if (!g_Engine->init(g_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		// 初期化失敗時は現状ただ戻るだけ。リソース解放やエラーメッセージ表示を追加すること。
+		return;
+	}
+
+	// シーンの初期化
+	g_Scene = new Scene();
+
+	if (!g_Scene->init()) {
 		return;
 	}
 

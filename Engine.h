@@ -3,6 +3,7 @@
 #include <dxgi.h>
 #include <dxgi1_4.h>
 #include "ComPtr.h"
+#include <stdio.h>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -50,7 +51,7 @@ private:
 	D3D12_RECT m_Scissor;
 
 private:
-	bool CreateRenerTarget();
+	bool CreateRenderTarget();
 	bool CreateDepthStencil();
 
 	UINT m_RtvDescriptorSize = 0;
