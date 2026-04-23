@@ -19,7 +19,7 @@ public:
 	void EndRender();
 
 public:
-	ID3D12Device* Device();
+	ID3D12Device6* Device();
 	ID3D12GraphicsCommandList* CommandList();
 	UINT CurrentBackBufferIndex();
 
@@ -63,7 +63,7 @@ private:
 
 private:
 	ID3D12Resource* m_currentRenderTarget = nullptr;
-	void WwaitRender();
+	void WaitRender();
 };
 
 extern Engine* g_Engine;	// ÉOÉçÅ[ÉoÉãâªÇ∑ÇÈ

@@ -52,14 +52,79 @@ bool Engine::init(HWND hwnd, UINT windiwWidth, UINT windiwHeight)
 	return true;
 }
 
+
+void Engine::EndRender() {
+	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_currentRenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	m_pCommandList->ResourceBarrier(1, &barrier);
+
+	m_pCommandList->Close();
+
+	ID3D12CommandList* ppCmdLists[] = { m_pCommandList.Get() };
+	m_pQueue->ExecuteCommandLists(1, ppCmdLists);
+
+	m_pSwapChain->Present(1, 0);
+
+	WaitRender();
+
+	m_CurrentBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+
+}
+
+void Engine::WaitRender() {
+
+	const UINT64 fenceValue = m_fenceValue[m_CurrentBackBufferIndex];
+	m_pQueue->Signal(m_pFence.Get(), fenceValue);
+	m_fenceValue[m_CurrentBackBufferIndex]++;
+
+	if (m_pFence->GetCompletedValue() < fenceValue) {
+
+		auto hr = m_pFence->SetEventOnCompletion(fenceValue, m_fenceEvent);
+		if (FAILED(hr)) {
+			return;
+		}
+
+		if (WAIT_OBJECT_0 != WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE)) {
+
+		}
+	}
+
+}
+
+void Engine::BeginRender() {
+	m_currentRenderTarget = m_pRenderTargets[m_CurrentBackBufferIndex].Get();
+
+	m_pAllocator[m_CurrentBackBufferIndex]->Reset();
+	m_pCommandList->Reset(m_pAllocator[m_CurrentBackBufferIndex].Get(), nullptr);
+
+	m_pCommandList->RSSetViewports(1, &m_Viewport);
+	m_pCommandList->RSSetScissorRects(1, &m_Scissor);
+
+	auto currentRtvHandle = m_pRtvHeap->GetCPUDescriptorHandleForHeapStart();
+	currentRtvHandle.ptr += m_CurrentBackBufferIndex * m_RtvDescriptorSize;
+
+	auto currentDsvHandle = m_pDsvHeap->GetCPUDescriptorHandleForHeapStart();
+
+	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_currentRenderTarget, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	m_pCommandList->ResourceBarrier(1, &barrier);
+
+	m_pCommandList->OMSetRenderTargets(1, &currentRtvHandle, FALSE, &currentDsvHandle);
+
+	const float clearColor[] = { 0.25f,0.25f,0.25f,1.0f };
+	m_pCommandList->ClearRenderTargetView(currentRtvHandle, clearColor, 0, nullptr);
+
+	m_pCommandList->ClearDepthStencilView(currentDsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+
+}
+
+/*
+ 概要:
+ - 深度ステンシルバッファ用のディスクリプタヒープ（DSV）を作成し、
+   深度ステンシルリソースをコミットして DSV を生成します。
+ - 戻り値: 正常に作成できれば true、失敗すれば false を返します。
+ - 前提: m_pDevice が有効であり、m_FrameBufferWidth/Height が正しく設定されていること。
+*/
+
 bool Engine::CreateDepthStencil() {
-	/*
-	 概要:
-	 - 深度ステンシルバッファ用のディスクリプタヒープ（DSV）を作成し、
-	   深度ステンシルリソースをコミットして DSV を生成します。
-	 - 戻り値: 正常に作成できれば true、失敗すれば false を返します。
-	 - 前提: m_pDevice が有効であり、m_FrameBufferWidth/Height が正しく設定されていること。
-	*/
 
 	// 1) DSV 用ディスクリプタヒープの記述子を作成
 	//    - DSV は CPU 側ハンドルから作成するため、ヒープは shader-visible ではなく NONE を使うのが一般的
@@ -461,3 +526,4 @@ bool Engine::CreateCommandQueue() {
 	// 成功判定を返す (呼び出し元は失敗時に初期化を中止する)
 	return SUCCEEDED(hr);
 }
+

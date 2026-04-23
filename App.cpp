@@ -125,6 +125,10 @@ void MainLoop() {
 			//  - 更新処理（Update）
 			//  - 描画処理（Render）
 			// ここにフレーム毎のロジックを入れる
+			g_Engine->BeginRender();
+
+			g_Engine->EndRender();
+
 		}
 	}
 
