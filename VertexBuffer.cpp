@@ -15,11 +15,12 @@
 #include "VertexBuffer.h"
 #include "Engine.h"
 #include <d3dx12.h>
+#include "ConstantBuffer.h"
 
-/// コンストラクタ
-/// @param size      バッファ全体のサイズ（バイト）
-/// @param stride    単一頂点のサイズ（バイト）
-/// @param pInitData 初期データへのポインタ（nullptr の場合は初期化しない）
+ /// コンストラクタ
+ /// @param size      バッファ全体のサイズ（バイト）
+ /// @param stride    単一頂点のサイズ（バイト）
+ /// @param pInitData 初期データへのポインタ（nullptr の場合は初期化しない）
 VertexBuffer::VertexBuffer(size_t size, size_t stride, const void* pInitData)
 {
 	// アップロードヒープを示すヒーププロパティを生成
@@ -71,9 +72,6 @@ D3D12_VERTEX_BUFFER_VIEW VertexBuffer::View() const
 	return m_View;
 }
 
-bool VertexBuffer::IsValid()
-{
+bool VertexBuffer::IsValid() {
 	return m_IsValid;
 }
-
-
