@@ -27,3 +27,21 @@ bool PipelineState::IsValid()
 void PipelineState::SetInputLayout(D3D12_INPUT_LAYOUT_DESC layout) {
 	desc.InputLayout = layout;
 }
+
+void PipelineState::SetRootSignature(ID3D12RootSignature* rootSignature) {
+	desc.pRootSignature = rootSignature;
+}
+
+void PipelineState::SetVS(std::wstring filePath) {
+	auto hr = D3DReadFileToBlob(filePath.c_str(), m_pVsBlob.GetAddressOf());
+	if (FAILED(hr)) {
+		printf("頂点シェーダーの読み込みに失敗");
+		return;
+	}
+
+	desc.VS = CD3DX12_SHADER_BYTECODE(m_pVsBlob.Get());
+}
+
+void PipelineState::SetPS(std::wstring filePath) {
+
+}
