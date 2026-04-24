@@ -5,6 +5,7 @@
 #include "SharedStruct.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
+#include "RootSignature.h"
 
 Scene* g_Scene;
 
@@ -12,6 +13,7 @@ using namespace DirectX;
 
 VertexBuffer* vertexBuffer;
 ConstantBuffer* constantBuffer[Engine::FRAME_BUFFER_COUNT];
+RootSignature* rootSignature;
 
 bool Scene::init()
 {
@@ -56,8 +58,15 @@ bool Scene::init()
 
 	}
 
-	printf("シーンの初期化に成功\n");
+	
+	rootSignature = new RootSignature();
+	if (!rootSignature->IsValid()) {
+		printf("ルートシグネチャの生成に失敗\n");
+		return false;
+	}
 
+
+	printf("シーンの初期化に成功\n");
 	return true;
 }
 
