@@ -1,5 +1,9 @@
-// ピクセルシェーダー
-float4 main() : SV_TARGET
+struct VSOutput{
+    float4 svpos : SV_POSITION;
+    float4 color : COLOR;
+};
+
+float4 pixel(VSOutput input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    return input.color;
 }
