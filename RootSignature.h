@@ -8,7 +8,7 @@ class RootSignature
 public:
 	RootSignature();
 	bool IsValid();
-	ID3D12RootSignature* get();
+	ID3D12RootSignature* Get();
 
 private:
 	bool m_IsValid = false;

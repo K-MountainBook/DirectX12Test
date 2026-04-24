@@ -43,5 +43,27 @@ void PipelineState::SetVS(std::wstring filePath) {
 }
 
 void PipelineState::SetPS(std::wstring filePath) {
+	auto hr = D3DReadFileToBlob(filePath.c_str(), m_pPsBlob.GetAddressOf());
+
+	if (FAILED(hr)) {
+		printf("ピクセルシェーダの読み込みに失敗\n");
+		return;
+	}
+
+	desc.PS = CD3DX12_SHADER_BYTECODE(m_pPsBlob.Get());
+}
+
+void PipelineState::Create() {
+	auto hr = g_Engine->Device()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(m_pPipelineState.ReleaseAndGetAddressOf()));
+	if (FAILED(hr)) {
+		printf("パイプラインステートの生成に失敗");
+		return;
+	}
+	m_IsValid = true;
 
 }
+
+ID3D12PipelineState* PipelineState::Get() {
+	return m_pPipelineState.Get();
+}
+

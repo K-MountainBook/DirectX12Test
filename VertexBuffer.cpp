@@ -49,11 +49,11 @@ VertexBuffer::VertexBuffer(size_t size, size_t stride, const void* pInitData)
 
 	m_View.BufferLocation = m_pBuffer->GetGPUVirtualAddress();
 	m_View.SizeInBytes = static_cast<UINT>(size);
-	m_View.StrideInBytes = static_cast<UINT>(size);
+	m_View.StrideInBytes = static_cast<UINT>(stride);
 
 	if (pInitData != nullptr) {
-		void* ptr = nullptr;
 
+		void* ptr = nullptr;
 		hr = m_pBuffer->Map(0, nullptr, &ptr);
 		if (FAILED(hr)) {
 			printf("頂点バッファマッピングに失敗");
@@ -62,8 +62,10 @@ VertexBuffer::VertexBuffer(size_t size, size_t stride, const void* pInitData)
 
 
 		memcpy(ptr, pInitData, size);
+
 		m_pBuffer->Unmap(0, nullptr);
 	}
+
 	m_IsValid = true;
 }
 
