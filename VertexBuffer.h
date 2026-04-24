@@ -16,6 +16,5 @@ private:
 
 	VertexBuffer(const VertexBuffer&) = delete;
 	void operator = (const VertexBuffer&) = delete;
-
 };
 
