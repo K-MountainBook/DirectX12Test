@@ -2,7 +2,7 @@
 class Scene
 {
 public:
-	bool init();
+	bool Init();
 
 	void Update();
 	void Draw();

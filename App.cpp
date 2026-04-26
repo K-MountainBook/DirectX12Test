@@ -149,7 +149,7 @@ void StartApp(const TCHAR* appName) {
 
 	g_Engine = new Engine();
 
-	if (!g_Engine->init(g_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT)) {
+	if (!g_Engine->Init(g_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		// 初期化失敗時は現状ただ戻るだけ。リソース解放やエラーメッセージ表示を追加すること。
 		return;
 	}
@@ -157,7 +157,7 @@ void StartApp(const TCHAR* appName) {
 	// シーンの初期化
 	g_Scene = new Scene();
 
-	if (!g_Scene->init()) {
+	if (!g_Scene->Init()) {
 		return;
 	}
 

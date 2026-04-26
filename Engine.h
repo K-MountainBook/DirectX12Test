@@ -14,7 +14,7 @@ public:
 	enum { FRAME_BUFFER_COUNT = 2 };
 
 public:
-	bool init(HWND hwnd, UINT windiwWidth, UINT windiwHeight);
+	bool Init(HWND hwnd, UINT windiwWidth, UINT windiwHeight);
 
 	void BeginRender();
 	void EndRender();

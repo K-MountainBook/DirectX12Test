@@ -32,7 +32,7 @@ Engine* g_Engine;
  - 備考:
    CreateDevice / CreateCommandQueue の失敗時に false を返す。
 */
-bool Engine::init(HWND hwnd, UINT windiwWidth, UINT windiwHeight)
+bool Engine::Init(HWND hwnd, UINT windiwWidth, UINT windiwHeight)
 {
 
 	// フレームバッファ幅・高さを保存

@@ -18,7 +18,7 @@ ConstantBuffer* constantBuffer[Engine::FRAME_BUFFER_COUNT];
 RootSignature* rootSignature;
 PipelineState* pipelinestate;
 
-bool Scene::init()
+bool Scene::Init()
 {
 	Vertex verticles[3] = {};
 
@@ -90,10 +90,10 @@ float rotateY = 0.0f;
 void Scene::Update()
 {
 
-	rotateY += 0.02f;
-	auto currentIndex = g_Engine->CurrentBackBufferIndex(); // 現在のフレーム番号を取得
-	auto currentTransform = constantBuffer[currentIndex]->GetPtr<Transform>(); // 現在のフレーム番号に対応する定数バッファを取得
-	currentTransform->World = DirectX::XMMatrixRotationY(rotateY); // Y軸で回転させる
+	//rotateY += 0.02f;
+	//auto currentIndex = g_Engine->CurrentBackBufferIndex(); // 現在のフレーム番号を取得
+	//auto currentTransform = constantBuffer[currentIndex]->GetPtr<Transform>(); // 現在のフレーム番号に対応する定数バッファを取得
+	//currentTransform->World = DirectX::XMMatrixRotationY(rotateY); // Y軸で回転させる
 }
 
 void Scene::Draw()
